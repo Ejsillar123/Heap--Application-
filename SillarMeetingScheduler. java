@@ -1,0 +1,103 @@
+import java.util.PriorityQueue;
+import java.util.Scanner;
+
+class Meeting implements Comparable<Meeting> {
+    String title;
+    String date;
+    String time;
+    int priority; // Lower value means higher priority
+
+    public Meeting(String title, String date, String time, int priority) {
+        this.title = title;
+        this.date = date;
+        this.time = time;
+        this.priority = priority;
+    }
+
+    @Override
+    public int compareTo(Meeting other) {
+        return Integer.compare(this.priority, other.priority);
+    }
+
+    @Override
+    public String toString() {
+        return "Title: " + title + ", Date: " + date + ", Time: " + time + ", Priority: " + priority;
+    }
+}
+
+public class MeetingScheduler {
+    public static void main(String[] args) {
+        PriorityQueue<Meeting> meetingQueue = new PriorityQueue<>();
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        System.out.println("Meeting Scheduler Application");
+        System.out.println("-----------------------------");
+
+        do {
+            System.out.println("\nMenu:");
+            System.out.println("1. Add a Meeting");
+            System.out.println("2. View Next Meeting");
+            System.out.println("3. Remove Next Meeting");
+            System.out.println("4. View All Scheduled Meetings");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter Meeting Title: ");
+                    String title = scanner.nextLine();
+                    System.out.print("Enter Meeting Date (e.g., 2024-11-25): ");
+                    String date = scanner.nextLine();
+                    System.out.print("Enter Meeting Time (e.g., 14:30): ");
+                    String time = scanner.nextLine();
+                    System.out.print("Enter Priority (1 for highest, larger numbers for lower priority): ");
+                    int priority = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+
+                    Meeting meeting = new Meeting(title, date, time, priority);
+                    meetingQueue.add(meeting);
+                    System.out.println("Meeting added successfully!");
+                    break;
+
+                case 2:
+                    if (!meetingQueue.isEmpty()) {
+                        System.out.println("Next Meeting:\n" + meetingQueue.peek());
+                    } else {
+                        System.out.println("No meetings scheduled.");
+                    }
+                    break;
+
+                case 3:
+                    if (!meetingQueue.isEmpty()) {
+                        System.out.println("Removed Meeting:\n" + meetingQueue.poll());
+                    } else {
+                        System.out.println("No meetings to remove.");
+                    }
+                    break;
+
+                case 4:
+                    if (!meetingQueue.isEmpty()) {
+                        System.out.println("Scheduled Meetings:");
+                        for (Meeting m : meetingQueue) {
+                            System.out.println(m);
+                        }
+                    } else {
+                        System.out.println("No meetings scheduled.");
+                    }
+                    break;
+
+                case 5:
+                    System.out.println("Exiting...");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 5);
+
+        scanner.close();
+    }
+}
